@@ -62,3 +62,23 @@ Module::modules() 提供递归遍历（含自身），而 Conv2dImpl 是多态�
 优化器是按句柄协议工作的：构造时拿走一批张量，之后只认这批。
 
 模型那边随时可能换掉自己手里的那一批，而没有任何机制会通知优化器——所以这条“一次性建立、之后无人维护”的边，只能靠在训练函数入口对一次账。
+
+## 欠账清单（改动这些地方之前先看一眼）
+
+### 1. 初始化用维度代替类型
+`src/model/resnet.cpp` 里的 kaiming 初始化用的是
+
+    if (item.value().dim() == 4)      // 实际含义：这是一个 Conv2d
+
+当前网络里两者等价，但**将来加入非卷积的 4 维参数会静默误初始化**（不报错）。
+正解是照 Python 那句直译：
+
+    for (const auto& m : modules())   // std::vector<std::shared_ptr<Module>>
+        if (auto conv = std::dynamic_pointer_cast<torch::nn::Conv2dImpl>(m))
+            torch::nn::init::kaiming_normal_(conv->weight, 0, torch::kFanOut, torch::kReLU);
+
+（`Module::modules(bool include_self = true)` 在 libtorch 里返回
+`std::vector<std::shared_ptr<Module>>`；`Conv2dImpl` 继承自 `Module` 且有虚函数
+`clone`，所以 `dynamic_pointer_cast` 可用。）
+
+### 2. SVD_CPP项目里面的蒸馏参数里面包含了模型，这是不对的，DKD已经改了
