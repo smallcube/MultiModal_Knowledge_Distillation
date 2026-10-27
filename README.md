@@ -6,3 +6,6 @@
 （2）阅读论文，包括经典KD论文和最近的顶会顶刊论文。
 
 （3）了解奇异值分解SVD的数学原理以及Pytorch代码实现；
+
+
+蒸馏损失简单的都仍在这里了<https://github.com/C-can-not-move/MultiKD_CPP/tree/master/src/kd>
