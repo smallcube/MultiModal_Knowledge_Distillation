@@ -21,8 +21,9 @@
 
 # 下一步工作：
 （1）使用ResNet在大规模数据集（例如ImageNet）上进行知识蒸馏，建立基线；
-（2）验证我们所提出的思路能否带来提升。
 
+（2）验证我们所提出的思路能否带来提升。
+（3）看一下这个TOP-K蒸馏的论文《DeepKD: A Deeply Decoupled and Denoised Knowledge Distillation Trainer》
 
 
 # 2026-10-14 工作列表
