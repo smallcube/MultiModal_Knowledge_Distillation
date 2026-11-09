@@ -7,3 +7,5 @@ SVDKD 所用 ImageNet ResNet-34（四阶段、7×7 stem、224 输入、21,335,97
 C++ 前端不提供 forward hook，取中间层必须持有源码，而第三方预训练模型不提供，到时候只有用python了，这是不能通过模型"砍头"，换输出层的情况，不过DKD里面不需要。
 ***
 git clone 时用的加速器的端口要显示指明。
+
+git config --global http.https://github.com.proxy http://127.0.0.1:30808
